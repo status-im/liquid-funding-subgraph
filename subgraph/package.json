@@ -1,0 +1,16 @@
+{
+  "name": "liquid-funding-rinkeby",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ bgits/liquid-funding-rinkeby",
+    "create-local": "graph create --node http://localhost:8020/ bgits/liquid-funding-rinkeby",
+    "remove-local": "graph remove --node http://localhost:8020/ bgits/liquid-funding-rinkeby",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bgits/liquid-funding-rinkeby"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.14.0",
+    "@graphprotocol/graph-ts": "0.13.0"
+  }
+}

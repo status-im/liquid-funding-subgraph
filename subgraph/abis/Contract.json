@@ -1,0 +1,686 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idReceiver", "type": "uint64" },
+      { "name": "donorAddress", "type": "address" },
+      { "name": "token", "type": "address" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "addGiverAndDonate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x007611c6"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "APP_ADDR_NAMESPACE",
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x178e6079"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "whitelistDisabled",
+    "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x1c8e8568"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "projectId", "type": "uint64" }],
+    "name": "isProjectCanceled",
+    "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x2101a6ad"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "PLUGIN_MANAGER_ROLE",
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x24fea3b0"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "numberOfPledges",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x2a8ec8cc"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idPledge", "type": "uint64" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "confirmPayment",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x2ee88808"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      { "name": "idPledge", "type": "uint64" },
+      { "name": "idxDelegate", "type": "uint64" }
+    ],
+    "name": "getPledgeDelegate",
+    "outputs": [
+      { "name": "idDelegate", "type": "uint64" },
+      { "name": "addr", "type": "address" },
+      { "name": "name", "type": "string" }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x2f6b64ca"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "contractHashes", "type": "bytes32[]" }],
+    "name": "addValidPluginContracts",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x32ce8ebc"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getRecoveryVault",
+    "outputs": [{ "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x32f0a3b5"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "useWhitelist", "type": "bool" }],
+    "name": "useWhitelist",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x38740291"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "idPledge", "type": "uint64" }],
+    "name": "getPledge",
+    "outputs": [
+      { "name": "amount", "type": "uint256" },
+      { "name": "owner", "type": "uint64" },
+      { "name": "nDelegates", "type": "uint64" },
+      { "name": "intendedProject", "type": "uint64" },
+      { "name": "commitTime", "type": "uint64" },
+      { "name": "oldPledge", "type": "uint64" },
+      { "name": "token", "type": "address" },
+      { "name": "pledgeState", "type": "uint8" }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x3f657a46"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idPledge", "type": "uint64" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x43387983"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idSender", "type": "uint64" },
+      { "name": "idPledge", "type": "uint64" },
+      { "name": "amount", "type": "uint256" },
+      { "name": "idReceiver", "type": "uint64" }
+    ],
+    "name": "transfer",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x47c5ef43"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idGiver", "type": "uint64" },
+      { "name": "idReceiver", "type": "uint64" },
+      { "name": "token", "type": "address" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "donate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x4c4316c7"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "addr", "type": "address" }],
+    "name": "isValidPlugin",
+    "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x4eafbcd5"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "idPledge", "type": "uint64" }],
+    "name": "normalizePledge",
+    "outputs": [{ "name": "", "type": "uint64" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x50f8a803"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "name", "type": "string" },
+      { "name": "url", "type": "string" },
+      { "name": "commitTime", "type": "uint64" },
+      { "name": "plugin", "type": "address" }
+    ],
+    "name": "addDelegate",
+    "outputs": [{ "name": "idDelegate", "type": "uint64" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x52dc7dcc"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "numberOfPledgeAdmins",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x5503d9ba"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "pledgesAmounts", "type": "uint256[]" }],
+    "name": "mWithdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x57adafb6"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "EVMSCRIPT_REGISTRY_APP_ID",
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x60b1e057"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "addr", "type": "address" }],
+    "name": "removeValidPluginInstance",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x6293c702"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idReceiver", "type": "uint64" },
+      { "name": "token", "type": "address" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "addGiverAndDonate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x6ba3cc87"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "addr", "type": "address" },
+      { "name": "name", "type": "string" },
+      { "name": "url", "type": "string" },
+      { "name": "commitTime", "type": "uint64" },
+      { "name": "plugin", "type": "address" }
+    ],
+    "name": "addGiver",
+    "outputs": [{ "name": "idGiver", "type": "uint64" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x6e802c6a"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "name", "type": "string" },
+      { "name": "url", "type": "string" },
+      { "name": "projectAdmin", "type": "address" },
+      { "name": "parentProject", "type": "uint64" },
+      { "name": "commitTime", "type": "uint64" },
+      { "name": "plugin", "type": "address" }
+    ],
+    "name": "addProject",
+    "outputs": [{ "name": "idProject", "type": "uint64" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x72116e92"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "idProject", "type": "uint64" }],
+    "name": "cancelProject",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x796d5654"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "addr", "type": "address" }],
+    "name": "addValidPluginInstance",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x79f4542e"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "token", "type": "address" }],
+    "name": "allowRecoverability",
+    "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x7e7db6e1"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "name", "type": "string" },
+      { "name": "url", "type": "string" },
+      { "name": "commitTime", "type": "uint64" },
+      { "name": "plugin", "type": "address" }
+    ],
+    "name": "addGiver",
+    "outputs": [{ "name": "idGiver", "type": "uint64" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x7f61fa93"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "appId",
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x80afdea8"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "addr", "type": "address" }],
+    "name": "getCodeHash",
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x81ea4408"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "ETH",
+    "outputs": [{ "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8322fff2"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getInitializationBlock",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8b3dd749"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "EVMSCRIPT_REGISTRY_APP",
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x9b3fdf4c"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "_token", "type": "address" }],
+    "name": "transferToVault",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x9d4941d8"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      { "name": "_sender", "type": "address" },
+      { "name": "_role", "type": "bytes32" },
+      { "name": "params", "type": "uint256[]" }
+    ],
+    "name": "canPerform",
+    "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xa1658fad"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idPledge", "type": "uint64" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "cancelPledge",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xaf9f4563"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "contractHash", "type": "bytes32" }],
+    "name": "removeValidPluginContract",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xb12b5f76"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "_vault", "type": "address" }],
+    "name": "initialize",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xc4d66de8"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "contractHash", "type": "bytes32" }],
+    "name": "addValidPluginContract",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xc8ae070f"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idDelegate", "type": "uint64" },
+      { "name": "newAddr", "type": "address" },
+      { "name": "newName", "type": "string" },
+      { "name": "newUrl", "type": "string" },
+      { "name": "newCommitTime", "type": "uint64" }
+    ],
+    "name": "updateDelegate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xcc19ecf7"
+  },
+  {
+    "constant": false,
+    "inputs": [{ "name": "pledges", "type": "uint64[]" }],
+    "name": "mNormalizePledge",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xce17273c"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "kernel",
+    "outputs": [{ "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xd4aae0c4"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idSender", "type": "uint64" },
+      { "name": "pledgesAmounts", "type": "uint256[]" },
+      { "name": "idReceiver", "type": "uint64" }
+    ],
+    "name": "mTransfer",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xd639cd73"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idGiver", "type": "uint64" },
+      { "name": "newAddr", "type": "address" },
+      { "name": "newName", "type": "string" },
+      { "name": "newUrl", "type": "string" },
+      { "name": "newCommitTime", "type": "uint64" }
+    ],
+    "name": "updateGiver",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xdb7c2314"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idPledge", "type": "uint64" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "name": "cancelPayment",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xe9c211e2"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "idAdmin", "type": "uint64" }],
+    "name": "getPledgeAdmin",
+    "outputs": [
+      { "name": "adminType", "type": "uint8" },
+      { "name": "addr", "type": "address" },
+      { "name": "name", "type": "string" },
+      { "name": "url", "type": "string" },
+      { "name": "commitTime", "type": "uint64" },
+      { "name": "parentProject", "type": "uint64" },
+      { "name": "canceled", "type": "bool" },
+      { "name": "plugin", "type": "address" }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xeba8ba06"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "idProject", "type": "uint64" },
+      { "name": "newAddr", "type": "address" },
+      { "name": "newName", "type": "string" },
+      { "name": "newUrl", "type": "string" },
+      { "name": "newCommitTime", "type": "uint64" }
+    ],
+    "name": "updateProject",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xf6b24b1c"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "_script", "type": "bytes" }],
+    "name": "getExecutor",
+    "outputs": [{ "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xf92a79ff"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "vault",
+    "outputs": [{ "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xfbfa77cf"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "from", "type": "uint256" },
+      { "indexed": true, "name": "to", "type": "uint256" },
+      { "indexed": false, "name": "amount", "type": "uint256" }
+    ],
+    "name": "Transfer",
+    "type": "event",
+    "signature": "0xaf6151f5085accf2d57e1e7bf7601d3b3982e0de7e9a90f032f8554de9c104f6"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "name": "idProject", "type": "uint256" }],
+    "name": "CancelProject",
+    "type": "event",
+    "signature": "0x74acb192d39829b88a66ad5363afa9120c5a306a458287a870351ae34a04d346"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "idGiver", "type": "uint64" },
+      { "indexed": true, "name": "addr", "type": "address" },
+      { "indexed": false, "name": "url", "type": "string" }
+    ],
+    "name": "GiverAdded",
+    "type": "event",
+    "signature": "0xf5abb7d99fe692941bfd32625b4a8d7342036635d1fbb0e2a75754b8266c61a3"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "idGiver", "type": "uint64" },
+      { "indexed": false, "name": "url", "type": "string" }
+    ],
+    "name": "GiverUpdated",
+    "type": "event",
+    "signature": "0x4b2f87168338ea08f27c7f7b2dfe4e61feb620ffe9a6a6a18afeaf94546075bf"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "idDelegate", "type": "uint64" },
+      { "indexed": false, "name": "url", "type": "string" }
+    ],
+    "name": "DelegateAdded",
+    "type": "event",
+    "signature": "0xd921f0ff8d5f67ca22b52c5b4be3463a8cabd9d95c28a02dd7c86f9deb3329be"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "idDelegate", "type": "uint64" },
+      { "indexed": false, "name": "url", "type": "string" }
+    ],
+    "name": "DelegateUpdated",
+    "type": "event",
+    "signature": "0x6586deed9fa035704e9886588d904801e7e86d1ebd926905fa03a0018531b2fd"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "idProject", "type": "uint64" },
+      { "indexed": false, "name": "url", "type": "string" }
+    ],
+    "name": "ProjectAdded",
+    "type": "event",
+    "signature": "0x9958fc92731727637b02f1ac1e6caf2814442c27e1d962f0c477cd14280f586d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "name": "idProject", "type": "uint64" },
+      { "indexed": false, "name": "url", "type": "string" }
+    ],
+    "name": "ProjectUpdated",
+    "type": "event",
+    "signature": "0xab039fa652845d2aa9439ffe6f2130ee7203ed63f29b71bed5b3b74f27c58707"
+  }
+]
