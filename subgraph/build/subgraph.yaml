@@ -21,6 +21,7 @@ dataSources:
         - DelegateUpdated
         - ProjectAdded
         - ProjectUpdated
+        - Profile
       abis:
         - name: Contract
           file: Contract/abis/Contract.json
@@ -41,4 +42,7 @@ dataSources:
           handler: handleProjectAdded
         - event: ProjectUpdated(indexed uint64,string)
           handler: handleProjectUpdated
+      callHandlers:
+        - function: addProject(string,string,address,uint64,uint64,address)
+          handler: handleAddProject
       file: Contract/Contract.wasm

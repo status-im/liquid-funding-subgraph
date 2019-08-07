@@ -8,9 +8,31 @@ import {
   DelegateAdded,
   DelegateUpdated,
   ProjectAdded,
-  ProjectUpdated
+  ProjectUpdated,
+  AddProjectCall,
 } from "../generated/Contract/Contract"
-import { ExampleEntity } from "../generated/schema"
+import { ExampleEntity, Profile } from "../generated/schema"
+
+
+export function handleAddProject(call: AddProjectCall): void {
+    let id = call.outputs.idProject
+    let profile = new Profile(id.toHex())
+    profile.url = call.inputs.url
+    profile.name = call.inputs.name
+    profile.addr = call.inputs.projectAdmin
+    profile.commitTime = call.inputs.commitTime
+    profile.canceled = false
+    profile.type = 'PROJECT'
+    profile.profileId = id
+    profile.save()
+}
+
+export function handleProjectAdded(event: ProjectAdded): void {
+  //  let profileId = event.params.idProject.toHex()
+  //  let profile = new Profile(profileId)
+  //  profile.url = event.params.url
+  //  profile.save()
+}
 
 export function handleTransfer(event: Transfer): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -90,6 +112,5 @@ export function handleDelegateAdded(event: DelegateAdded): void {}
 
 export function handleDelegateUpdated(event: DelegateUpdated): void {}
 
-export function handleProjectAdded(event: ProjectAdded): void {}
 
 export function handleProjectUpdated(event: ProjectUpdated): void {}

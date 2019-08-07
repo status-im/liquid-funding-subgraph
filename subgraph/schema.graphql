@@ -4,3 +4,14 @@ type ExampleEntity @entity {
   from: BigInt! # uint256
   to: BigInt! # uint256
 }
+
+type Profile @entity {
+  id: ID!
+  addr: Bytes!
+  canceled: Boolean!
+  commitTime: BigInt!
+  type: String!
+  url: String!
+  name: String!
+  profileId: BigInt!
+}

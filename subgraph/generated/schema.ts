@@ -69,3 +69,97 @@ export class ExampleEntity extends Entity {
     this.set("to", Value.fromBigInt(value));
   }
 }
+
+export class Profile extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Profile entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Profile entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Profile", id.toString(), this);
+  }
+
+  static load(id: string): Profile | null {
+    return store.get("Profile", id) as Profile | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get addr(): Bytes {
+    let value = this.get("addr");
+    return value.toBytes();
+  }
+
+  set addr(value: Bytes) {
+    this.set("addr", Value.fromBytes(value));
+  }
+
+  get canceled(): boolean {
+    let value = this.get("canceled");
+    return value.toBoolean();
+  }
+
+  set canceled(value: boolean) {
+    this.set("canceled", Value.fromBoolean(value));
+  }
+
+  get commitTime(): BigInt {
+    let value = this.get("commitTime");
+    return value.toBigInt();
+  }
+
+  set commitTime(value: BigInt) {
+    this.set("commitTime", Value.fromBigInt(value));
+  }
+
+  get type(): string {
+    let value = this.get("type");
+    return value.toString();
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+
+  get url(): string {
+    let value = this.get("url");
+    return value.toString();
+  }
+
+  set url(value: string) {
+    this.set("url", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get profileId(): BigInt {
+    let value = this.get("profileId");
+    return value.toBigInt();
+  }
+
+  set profileId(value: BigInt) {
+    this.set("profileId", Value.fromBigInt(value));
+  }
+}
