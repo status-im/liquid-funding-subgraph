@@ -15,3 +15,11 @@ type Profile @entity {
   name: String!
   profileId: BigInt!
 }
+
+type PledgesInfo @entity {
+     id: ID!                         # id is unique on profile + token
+     profile: String!
+     token: String!
+     lifetimeReceived: BigInt!
+     balance: BigInt!
+}

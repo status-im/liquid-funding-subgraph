@@ -163,3 +163,70 @@ export class Profile extends Entity {
     this.set("profileId", Value.fromBigInt(value));
   }
 }
+
+export class PledgesInfo extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PledgesInfo entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PledgesInfo entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PledgesInfo", id.toString(), this);
+  }
+
+  static load(id: string): PledgesInfo | null {
+    return store.get("PledgesInfo", id) as PledgesInfo | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get profile(): string {
+    let value = this.get("profile");
+    return value.toString();
+  }
+
+  set profile(value: string) {
+    this.set("profile", Value.fromString(value));
+  }
+
+  get token(): string {
+    let value = this.get("token");
+    return value.toString();
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
+  }
+
+  get lifetimeReceived(): BigInt {
+    let value = this.get("lifetimeReceived");
+    return value.toBigInt();
+  }
+
+  set lifetimeReceived(value: BigInt) {
+    this.set("lifetimeReceived", Value.fromBigInt(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
+  }
+}

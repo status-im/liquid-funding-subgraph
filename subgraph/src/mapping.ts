@@ -10,8 +10,9 @@ import {
   ProjectAdded,
   ProjectUpdated,
   AddProjectCall,
+  DonateCall
 } from "../generated/Contract/Contract"
-import { ExampleEntity, Profile } from "../generated/schema"
+import { ExampleEntity, Profile, PledgesInfo } from "../generated/schema"
 
 
 export function handleAddProject(call: AddProjectCall): void {
@@ -25,6 +26,32 @@ export function handleAddProject(call: AddProjectCall): void {
     profile.type = 'PROJECT'
     profile.profileId = id
     profile.save()
+}
+
+export function handleDonate(call: DonateCall): void {
+    let giver = call.inputs.idGiver
+    let receiver = call.inputs.idReceiver
+    let token = call.inputs.token
+    let amount = call.inputs.amount
+
+    let giverId = giver.toString() + token.toString()
+    let receiverId = receiver.toString() + token.toString()
+
+    let giverPledges = PledgesInfo.load(giverId)
+    let receiverPledges = PledgesInfo.load(receiverId)
+
+    if (receiverPledges == null) {
+        receiverPledges = new PledgesInfo(receiverId)
+        receiverPledges.token = token.toString()
+        receiverPledges.profile = giver.toHex()
+    }
+    if (giver.notEqual(new BigInt(0))) {
+        giverPledges.balance.minus(amount)
+        giverPledges.save()
+    }
+    receiverPledges.lifetimeReceived.plus(amount)
+    receiverPledges.balance.plus(amount)
+    receiverPledges.save()
 }
 
 export function handleProjectAdded(event: ProjectAdded): void {

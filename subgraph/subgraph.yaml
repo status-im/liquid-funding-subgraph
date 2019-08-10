@@ -45,4 +45,6 @@ dataSources:
       callHandlers:
         - function: addProject(string,string,address,uint64,uint64,address)
           handler: handleAddProject
+        - function: donate(uint64,uint64,address,uint256)
+          handler: handleDonate
       file: ./src/mapping.ts
