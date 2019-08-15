@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { Address, BigInt, log } from "@graphprotocol/graph-ts"
 import {
   Contract,
   Transfer,
@@ -10,9 +10,10 @@ import {
   ProjectAdded,
   ProjectUpdated,
   AddProjectCall,
-  DonateCall
+  DonateCall,
+  AddGiverAndDonateCall,
 } from "../generated/Contract/Contract"
-import { ExampleEntity, Profile, PledgesInfo } from "../generated/schema"
+import { ExampleEntity, Profile, PledgesInfo, Pledge } from "../generated/schema"
 
 
 export function handleAddProject(call: AddProjectCall): void {
@@ -29,41 +30,102 @@ export function handleAddProject(call: AddProjectCall): void {
 }
 
 export function handleDonate(call: DonateCall): void {
-    let giver = call.inputs.idGiver
-    let receiver = call.inputs.idReceiver
-    let token = call.inputs.token
-    let amount = call.inputs.amount
+    // let giver = call.inputs.idGiver
+    // let receiver = call.inputs.idReceiver
+    // let token = call.inputs.token
+    // let amount = call.inputs.amount
 
-    let giverId = giver.toString() + token.toString()
-    let receiverId = receiver.toString() + token.toString()
+    // let giverId = giver.toString() + token.toString()
+    // let receiverId = receiver.toString() + token.toString()
 
-    let giverPledges = PledgesInfo.load(giverId)
-    let receiverPledges = PledgesInfo.load(receiverId)
+    // let giverPledges = PledgesInfo.load(giverId)
+    // let receiverPledges = PledgesInfo.load(receiverId)
 
-    if (receiverPledges == null) {
-        receiverPledges = new PledgesInfo(receiverId)
-        receiverPledges.token = token.toString()
-        receiverPledges.profile = giver.toHex()
-    }
-    if (giver.notEqual(new BigInt(0))) {
-        giverPledges.balance.minus(amount)
-        giverPledges.save()
-    }
-    receiverPledges.lifetimeReceived.plus(amount)
-    receiverPledges.balance.plus(amount)
-    receiverPledges.save()
+    // if (receiverPledges == null) {
+    //     receiverPledges = new PledgesInfo(receiverId)
+    //     receiverPledges.token = token.toString()
+    //     receiverPledges.profile = receiver.toHex()
+    // }
+    // if (giver.notEqual(new BigInt(0))) {
+    //     giverPledges.balance.minus(amount)
+    //     giverPledges.save()
+    // }
+    // receiverPledges.lifetimeReceived.plus(amount)
+    // receiverPledges.balance.plus(amount)
+    // receiverPledges.save()
+
+    log.info(
+        'id receiver: {}, amount: {}, token: {}',
+        [
+            call.inputs.idReceiver.toString(),
+            call.inputs.amount.toString(),
+            call.inputs.token.toString()
+        ]
+    )
 }
 
-export function handleProjectAdded(event: ProjectAdded): void {
-  //  let profileId = event.params.idProject.toHex()
-  //  let profile = new Profile(profileId)
-  //  profile.url = event.params.url
-  //  profile.save()
+export function handleAddGiverAndDonate(call: AddGiverAndDonateCall): void {
+    // let receiver = call.inputs.idReceiver
+    // let token = call.inputs.token
+    // let amount = call.inputs.amount
+    // let receiverId = receiver.toString() + token.toString()
+
+    // let receiverPledges = PledgesInfo.load(receiverId)
+
+    // if (receiverPledges == null) {
+    //     receiverPledges = new PledgesInfo(receiverId)
+    //     receiverPledges.token = token.toString()
+    //     receiverPledges.profile = receiver.toHex()
+    // }
+    // receiverPledges.lifetimeReceived.plus(amount)
+    // receiverPledges.balance.plus(amount)
+    // receiverPledges.save()
+    log.info(
+        'id receiver: {}, amount: {}, token: {}',
+        [
+            call.inputs.idReceiver.toString(),
+            call.inputs.amount.toString(),
+            call.inputs.token.toString()
+        ]
+    )
 }
 
 export function handleTransfer(event: Transfer): void {
   // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
+    // needs to be unique across all entities of the same type
+    let contract = Contract.bind(event.address)
+    let pledge =  contract.getPledge(event.params.to)
+    let token = pledge.value6
+    let owner = pledge.value1
+    let amount = pledge.value0
+    let commitTime = pledge.value4
+    let intendedProject = pledge.value3
+    let pledgeState = pledge.value7
+    let ndelegates = pledge.value2
+    log.info(
+        'amount: {}, owner: {}, nDelegates: {}, intendedProject: {}, commitTime: {}, oldPledge: {}, pledge token: {}, pledge state: {}',
+        [
+            pledge.value0.toString(), // amount
+            pledge.value1.toString(), // owner
+            pledge.value2.toString(), // nDelegates
+            pledge.value3.toString(), // intendedProject
+            pledge.value4.toString(), // commitTime
+            pledge.value5.toString(), // old pledge
+            pledge.value6.toHexString(), // Token
+            pledge.value7.toString() // pledgeState
+        ]
+    )
+    let pledgeEntity = Pledge.load(event.params.to.toHex())
+    if (pledgeEntity == null) pledgeEntity = new Pledge(event.params.to.toHex())
+    pledgeEntity.owner = owner.toString()
+    pledgeEntity.token = token.toHexString()
+    pledgeEntity.amount = amount
+    pledgeEntity.commitTime = commitTime
+    pledgeEntity.intendedProject = intendedProject
+    pledgeEntity.pledgeState = pledgeState
+    pledgeEntity.nDelegates = ndelegates
+    pledgeEntity.save()
+
   let entity = ExampleEntity.load(event.transaction.from.toHex())
 
   // Entities only exist after they have been saved to the store;
@@ -139,5 +201,6 @@ export function handleDelegateAdded(event: DelegateAdded): void {}
 
 export function handleDelegateUpdated(event: DelegateUpdated): void {}
 
-
 export function handleProjectUpdated(event: ProjectUpdated): void {}
+
+export function handleProjectAdded(event: ProjectUpdated): void {}

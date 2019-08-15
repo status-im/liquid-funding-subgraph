@@ -23,3 +23,14 @@ type PledgesInfo @entity {
      lifetimeReceived: BigInt!
      balance: BigInt!
 }
+
+type Pledge @entity {
+     id: ID!
+     owner: String!
+     amount: BigInt!
+     token: String!
+     commitTime: BigInt!
+     nDelegates: BigInt!
+     intendedProject: BigInt!
+     pledgeState: Int!
+}

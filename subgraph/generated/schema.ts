@@ -230,3 +230,97 @@ export class PledgesInfo extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 }
+
+export class Pledge extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Pledge entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Pledge entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Pledge", id.toString(), this);
+  }
+
+  static load(id: string): Pledge | null {
+    return store.get("Pledge", id) as Pledge | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): string {
+    let value = this.get("owner");
+    return value.toString();
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get token(): string {
+    let value = this.get("token");
+    return value.toString();
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
+  }
+
+  get commitTime(): BigInt {
+    let value = this.get("commitTime");
+    return value.toBigInt();
+  }
+
+  set commitTime(value: BigInt) {
+    this.set("commitTime", Value.fromBigInt(value));
+  }
+
+  get nDelegates(): BigInt {
+    let value = this.get("nDelegates");
+    return value.toBigInt();
+  }
+
+  set nDelegates(value: BigInt) {
+    this.set("nDelegates", Value.fromBigInt(value));
+  }
+
+  get intendedProject(): BigInt {
+    let value = this.get("intendedProject");
+    return value.toBigInt();
+  }
+
+  set intendedProject(value: BigInt) {
+    this.set("intendedProject", Value.fromBigInt(value));
+  }
+
+  get pledgeState(): i32 {
+    let value = this.get("pledgeState");
+    return value.toI32();
+  }
+
+  set pledgeState(value: i32) {
+    this.set("pledgeState", Value.fromI32(value));
+  }
+}
