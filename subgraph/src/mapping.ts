@@ -1,4 +1,4 @@
-import { Address, BigInt, log } from "@graphprotocol/graph-ts"
+import { Address, BigInt, log, ipfs } from "@graphprotocol/graph-ts"
 import {
   Contract,
   Transfer,
@@ -13,13 +13,14 @@ import {
   DonateCall,
   AddGiverAndDonateCall,
 } from "../generated/Contract/Contract"
-import { ExampleEntity, Profile, PledgesInfo, Pledge } from "../generated/schema"
+import { Profile, PledgesInfo, Pledge } from "../generated/schema"
 
 
 export function handleAddProject(call: AddProjectCall): void {
     let id = call.outputs.idProject
     let profile = new Profile(id.toHex())
-    profile.url = call.inputs.url
+    let content = call.inputs.url
+    profile.url = content
     profile.name = call.inputs.name
     profile.addr = call.inputs.projectAdmin
     profile.commitTime = call.inputs.commitTime
@@ -27,6 +28,19 @@ export function handleAddProject(call: AddProjectCall): void {
     profile.type = 'PROJECT'
     profile.profileId = id
     profile.save()
+
+    let hash = content.split('/').slice(-1)[0]
+    let data = ipfs.cat(hash)
+    let manifest = ipfs.cat(hash + '/manifest.json')
+    if (data != null) {
+        log.info(
+            'ipfs content: {}, manifest content: {}',
+            [
+                data.toString(),
+                manifest.toString()
+            ]
+        )
+    }
 }
 
 export function handleDonate(call: DonateCall): void {
@@ -90,9 +104,32 @@ export function handleAddGiverAndDonate(call: AddGiverAndDonateCall): void {
     )
 }
 
-export function handleTransfer(event: Transfer): void {
-  // Entities can be loaded from the store using a string ID; this ID
-    // needs to be unique across all entities of the same type
+function createOrUpdatePledgeInfo(event: Transfer): void {
+    let pledgeTo = Pledge.load(event.params.to.toHex())
+    let amount = event.params.amount
+    let pledgeInfoToId = pledgeTo.owner + pledgeTo.token
+    let pledgeInfoTo = PledgesInfo.load(pledgeInfoToId)
+    if (pledgeInfoTo == null) {
+        pledgeInfoTo = new PledgesInfo(pledgeInfoToId)
+        pledgeInfoTo.token = pledgeTo.token
+        pledgeInfoTo.profile = pledgeTo.owner
+        pledgeInfoTo.lifetimeReceived = new BigInt(0)
+        pledgeInfoTo.balance = new BigInt(0)
+    }
+    pledgeInfoTo.lifetimeReceived = amount.plus(pledgeInfoTo.lifetimeReceived)
+    pledgeInfoTo.balance = amount.plus(pledgeInfoTo.balance)
+    pledgeInfoTo.save()
+
+    let pledgeFrom = Pledge.load(event.params.from.toHex())
+    if (pledgeFrom != null) {
+        let pledgeInfoFromId = pledgeFrom.owner + pledgeFrom.token
+        let pledgeInfoFrom = PledgesInfo.load(pledgeInfoFromId)
+        pledgeInfoFrom.balance = pledgeInfoFrom.balance.minus(amount)
+        pledgeInfoFrom.save()
+    }
+}
+
+function createOrUpdatePledge(event: Transfer): void {
     let contract = Contract.bind(event.address)
     let pledge =  contract.getPledge(event.params.to)
     let token = pledge.value6
@@ -103,8 +140,9 @@ export function handleTransfer(event: Transfer): void {
     let pledgeState = pledge.value7
     let ndelegates = pledge.value2
     log.info(
-        'amount: {}, owner: {}, nDelegates: {}, intendedProject: {}, commitTime: {}, oldPledge: {}, pledge token: {}, pledge state: {}',
+        'pledge id: {}, amount: {}, owner: {}, nDelegates: {}, intendedProject: {}, commitTime: {}, oldPledge: {}, pledge token: {}, pledge state: {}, transfer amount: {}',
         [
+            event.params.to.toString(),
             pledge.value0.toString(), // amount
             pledge.value1.toString(), // owner
             pledge.value2.toString(), // nDelegates
@@ -112,7 +150,8 @@ export function handleTransfer(event: Transfer): void {
             pledge.value4.toString(), // commitTime
             pledge.value5.toString(), // old pledge
             pledge.value6.toHexString(), // Token
-            pledge.value7.toString() // pledgeState
+            pledge.value7.toString(), // pledgeState
+            event.params.amount.toString()
         ]
     )
     let pledgeEntity = Pledge.load(event.params.to.toHex())
@@ -125,27 +164,11 @@ export function handleTransfer(event: Transfer): void {
     pledgeEntity.pledgeState = pledgeState
     pledgeEntity.nDelegates = ndelegates
     pledgeEntity.save()
+}
 
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
-
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.from = event.params.from
-  entity.to = event.params.to
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
+export function handleTransfer(event: Transfer): void {
+    createOrUpdatePledge(event)
+    createOrUpdatePledgeInfo(event)
 
   // Note: If a handler doesn't require existing field values, it is faster
   // _not_ to load the entity from the store. Instead, create it fresh with
