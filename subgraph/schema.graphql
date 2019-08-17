@@ -7,6 +7,10 @@ type Profile @entity {
   url: String!
   name: String!
   profileId: BigInt!
+  creationTime: BigInt!
+  pledgesInfos: [PledgesInfo]! @derivedFrom(field: "profileRef")
+  pledges: [Pledge]! @derivedFrom(field: "owner")
+  projectInfo: ProjectInfo
 }
 
 type PledgesInfo @entity {
@@ -15,15 +19,33 @@ type PledgesInfo @entity {
      token: String!
      lifetimeReceived: BigInt!
      balance: BigInt!
+     profileRef: Profile!
 }
 
 type Pledge @entity {
      id: ID!
-     owner: String!
+     owner: Profile
      amount: BigInt!
      token: String!
      commitTime: BigInt!
      nDelegates: BigInt!
      intendedProject: BigInt!
      pledgeState: Int!
+}
+
+type ProjectInfo @entity {
+     id: ID!
+     profile: Profile
+     title: String
+     subtitle: String
+     creator: String
+     repo: String
+     avatar: String
+     goal: String
+     goalToken: String
+     description: String
+     chatRoom: String
+     isPlaying: Boolean
+     type: String
+     file: String
 }

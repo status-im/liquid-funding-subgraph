@@ -1,4 +1,4 @@
-import { Address, BigInt, log, ipfs } from "@graphprotocol/graph-ts"
+import { Address, BigInt, log, ipfs, json, Bytes } from "@graphprotocol/graph-ts"
 import {
   Contract,
   Transfer,
@@ -13,11 +13,12 @@ import {
   DonateCall,
   AddGiverAndDonateCall,
 } from "../generated/Contract/Contract"
-import { Profile, PledgesInfo, Pledge } from "../generated/schema"
+import { Profile, PledgesInfo, Pledge, ProjectInfo } from "../generated/schema"
 
 
 export function handleAddProject(call: AddProjectCall): void {
     let id = call.outputs.idProject
+    let timestamp = call.block.timestamp
     let profile = new Profile(id.toHex())
     let content = call.inputs.url
     profile.url = content
@@ -27,19 +28,45 @@ export function handleAddProject(call: AddProjectCall): void {
     profile.canceled = false
     profile.type = 'PROJECT'
     profile.profileId = id
+    profile.creationTime = timestamp
     profile.save()
+    createProjectInfo(content, profile)
+}
 
+function createProjectInfo(content: String, profile: Profile): void {
     let hash = content.split('/').slice(-1)[0]
-    let data = ipfs.cat(hash)
-    let manifest = ipfs.cat(hash + '/manifest.json')
-    if (data != null) {
+    let contentHash = hash + '/manifest.json'
+    let manifest = ipfs.cat(contentHash)
+
+    if (manifest == null) {
+        log.info('manifest is null', [])
+    } else {
+        let parsed = json.fromBytes(manifest as Bytes).toObject()
         log.info(
-            'ipfs content: {}, manifest content: {}',
+            'ipfs title: {}',
             [
-                data.toString(),
-                manifest.toString()
+                parsed.get('title').toString()
             ]
         )
+        let projectInfo = new ProjectInfo(contentHash)
+        projectInfo.profile = profile.id
+        projectInfo.title = parsed.get('title').toString()
+        projectInfo.subtitle = parsed.get('subtitle').toString()
+        projectInfo.creator = parsed.get('creator').toString()
+        projectInfo.repo = parsed.get('repo').toString()
+        projectInfo.avatar = parsed.get('avatar').toString()
+        projectInfo.goal = parsed.get('goal').toString()
+        projectInfo.goalToken = parsed.get('goalToken').toString()
+        projectInfo.description = parsed.get('description').toString()
+        projectInfo.chatRoom = parsed.get('chatRoom').toString()
+        let media = parsed.get('media').toObject()
+        projectInfo.isPlaying = media.get('isPlaying').toBool()
+        projectInfo.type = media.get('type').toString()
+        projectInfo.file = media.get('file').toString()
+        projectInfo.save()
+
+        profile.projectInfo = projectInfo.id
+        profile.save()
     }
 }
 
@@ -113,6 +140,7 @@ function createOrUpdatePledgeInfo(event: Transfer): void {
         pledgeInfoTo = new PledgesInfo(pledgeInfoToId)
         pledgeInfoTo.token = pledgeTo.token
         pledgeInfoTo.profile = pledgeTo.owner
+        pledgeInfoTo.profileRef = pledgeTo.owner
         pledgeInfoTo.lifetimeReceived = new BigInt(0)
         pledgeInfoTo.balance = new BigInt(0)
     }
@@ -133,7 +161,7 @@ function createOrUpdatePledge(event: Transfer): void {
     let contract = Contract.bind(event.address)
     let pledge =  contract.getPledge(event.params.to)
     let token = pledge.value6
-    let owner = pledge.value1
+    let owner = pledge.value1.toHex()
     let amount = pledge.value0
     let commitTime = pledge.value4
     let intendedProject = pledge.value3
@@ -156,7 +184,7 @@ function createOrUpdatePledge(event: Transfer): void {
     )
     let pledgeEntity = Pledge.load(event.params.to.toHex())
     if (pledgeEntity == null) pledgeEntity = new Pledge(event.params.to.toHex())
-    pledgeEntity.owner = owner.toString()
+    pledgeEntity.owner = owner
     pledgeEntity.token = token.toHexString()
     pledgeEntity.amount = amount
     pledgeEntity.commitTime = commitTime

@@ -104,6 +104,50 @@ export class Profile extends Entity {
   set profileId(value: BigInt) {
     this.set("profileId", Value.fromBigInt(value));
   }
+
+  get creationTime(): BigInt {
+    let value = this.get("creationTime");
+    return value.toBigInt();
+  }
+
+  set creationTime(value: BigInt) {
+    this.set("creationTime", Value.fromBigInt(value));
+  }
+
+  get pledgesInfos(): Array<string | null> {
+    let value = this.get("pledgesInfos");
+    return value.toStringArray();
+  }
+
+  set pledgesInfos(value: Array<string | null>) {
+    this.set("pledgesInfos", Value.fromStringArray(value));
+  }
+
+  get pledges(): Array<string | null> {
+    let value = this.get("pledges");
+    return value.toStringArray();
+  }
+
+  set pledges(value: Array<string | null>) {
+    this.set("pledges", Value.fromStringArray(value));
+  }
+
+  get projectInfo(): string | null {
+    let value = this.get("projectInfo");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set projectInfo(value: string | null) {
+    if (value === null) {
+      this.unset("projectInfo");
+    } else {
+      this.set("projectInfo", Value.fromString(value as string));
+    }
+  }
 }
 
 export class PledgesInfo extends Entity {
@@ -171,6 +215,15 @@ export class PledgesInfo extends Entity {
   set balance(value: BigInt) {
     this.set("balance", Value.fromBigInt(value));
   }
+
+  get profileRef(): string {
+    let value = this.get("profileRef");
+    return value.toString();
+  }
+
+  set profileRef(value: string) {
+    this.set("profileRef", Value.fromString(value));
+  }
 }
 
 export class Pledge extends Entity {
@@ -203,13 +256,21 @@ export class Pledge extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get owner(): string {
+  get owner(): string | null {
     let value = this.get("owner");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set owner(value: string) {
-    this.set("owner", Value.fromString(value));
+  set owner(value: string | null) {
+    if (value === null) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromString(value as string));
+    }
   }
 
   get amount(): BigInt {
@@ -264,5 +325,249 @@ export class Pledge extends Entity {
 
   set pledgeState(value: i32) {
     this.set("pledgeState", Value.fromI32(value));
+  }
+}
+
+export class ProjectInfo extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ProjectInfo entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ProjectInfo entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ProjectInfo", id.toString(), this);
+  }
+
+  static load(id: string): ProjectInfo | null {
+    return store.get("ProjectInfo", id) as ProjectInfo | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get profile(): string | null {
+    let value = this.get("profile");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set profile(value: string | null) {
+    if (value === null) {
+      this.unset("profile");
+    } else {
+      this.set("profile", Value.fromString(value as string));
+    }
+  }
+
+  get title(): string | null {
+    let value = this.get("title");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set title(value: string | null) {
+    if (value === null) {
+      this.unset("title");
+    } else {
+      this.set("title", Value.fromString(value as string));
+    }
+  }
+
+  get subtitle(): string | null {
+    let value = this.get("subtitle");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set subtitle(value: string | null) {
+    if (value === null) {
+      this.unset("subtitle");
+    } else {
+      this.set("subtitle", Value.fromString(value as string));
+    }
+  }
+
+  get creator(): string | null {
+    let value = this.get("creator");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set creator(value: string | null) {
+    if (value === null) {
+      this.unset("creator");
+    } else {
+      this.set("creator", Value.fromString(value as string));
+    }
+  }
+
+  get repo(): string | null {
+    let value = this.get("repo");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set repo(value: string | null) {
+    if (value === null) {
+      this.unset("repo");
+    } else {
+      this.set("repo", Value.fromString(value as string));
+    }
+  }
+
+  get avatar(): string | null {
+    let value = this.get("avatar");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set avatar(value: string | null) {
+    if (value === null) {
+      this.unset("avatar");
+    } else {
+      this.set("avatar", Value.fromString(value as string));
+    }
+  }
+
+  get goal(): string | null {
+    let value = this.get("goal");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set goal(value: string | null) {
+    if (value === null) {
+      this.unset("goal");
+    } else {
+      this.set("goal", Value.fromString(value as string));
+    }
+  }
+
+  get goalToken(): string | null {
+    let value = this.get("goalToken");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set goalToken(value: string | null) {
+    if (value === null) {
+      this.unset("goalToken");
+    } else {
+      this.set("goalToken", Value.fromString(value as string));
+    }
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (value === null) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(value as string));
+    }
+  }
+
+  get chatRoom(): string | null {
+    let value = this.get("chatRoom");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set chatRoom(value: string | null) {
+    if (value === null) {
+      this.unset("chatRoom");
+    } else {
+      this.set("chatRoom", Value.fromString(value as string));
+    }
+  }
+
+  get isPlaying(): boolean {
+    let value = this.get("isPlaying");
+    return value.toBoolean();
+  }
+
+  set isPlaying(value: boolean) {
+    this.set("isPlaying", Value.fromBoolean(value));
+  }
+
+  get type(): string | null {
+    let value = this.get("type");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set type(value: string | null) {
+    if (value === null) {
+      this.unset("type");
+    } else {
+      this.set("type", Value.fromString(value as string));
+    }
+  }
+
+  get file(): string | null {
+    let value = this.get("file");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set file(value: string | null) {
+    if (value === null) {
+      this.unset("file");
+    } else {
+      this.set("file", Value.fromString(value as string));
+    }
   }
 }
