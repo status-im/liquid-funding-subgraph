@@ -31,6 +31,7 @@ type Pledge @entity {
      nDelegates: BigInt!
      intendedProject: BigInt!
      pledgeState: Int!
+     creationTime: BigInt!
 }
 
 type ProjectInfo @entity {

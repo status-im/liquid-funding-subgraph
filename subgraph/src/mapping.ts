@@ -160,6 +160,7 @@ function createOrUpdatePledgeInfo(event: Transfer): void {
 function createOrUpdatePledge(event: Transfer): void {
     let contract = Contract.bind(event.address)
     let pledge =  contract.getPledge(event.params.to)
+    let timestamp = event.block.timestamp
     let token = pledge.value6
     let owner = pledge.value1.toHex()
     let amount = pledge.value0
@@ -191,6 +192,7 @@ function createOrUpdatePledge(event: Transfer): void {
     pledgeEntity.intendedProject = intendedProject
     pledgeEntity.pledgeState = pledgeState
     pledgeEntity.nDelegates = ndelegates
+    pledgeEntity.creationTime = timestamp
     pledgeEntity.save()
 }
 

@@ -326,6 +326,15 @@ export class Pledge extends Entity {
   set pledgeState(value: i32) {
     this.set("pledgeState", Value.fromI32(value));
   }
+
+  get creationTime(): BigInt {
+    let value = this.get("creationTime");
+    return value.toBigInt();
+  }
+
+  set creationTime(value: BigInt) {
+    this.set("creationTime", Value.fromBigInt(value));
+  }
 }
 
 export class ProjectInfo extends Entity {
