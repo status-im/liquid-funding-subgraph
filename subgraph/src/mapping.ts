@@ -185,9 +185,14 @@ function createOrUpdatePledge(event: Transfer): void {
     )
     let toPledge = Pledge.load(event.params.to.toHex())
     let fromPledge = Pledge.load(event.params.from.toHex())
-    if (toPledge == null) toPledge = new Pledge(event.params.to.toHex())
-    if (fromPledge == null) fromPledge = new Pledge(event.params.from.toHex())
-    fromPledge.amount = fromPledge.amount.minus(amount)
+    if (toPledge == null) {
+        toPledge = new Pledge(event.params.to.toHex())
+        toPledge.amount = new BigInt(0)
+    }
+    if (fromPledge != null) {
+        fromPledge.amount = fromPledge.amount.minus(amount)
+        fromPledge.save()
+    }
     toPledge.owner = owner
     toPledge.token = token.toHexString()
     toPledge.amount = toPledge.amount.plus(amount)
@@ -197,7 +202,6 @@ function createOrUpdatePledge(event: Transfer): void {
     toPledge.nDelegates = ndelegates
     toPledge.creationTime = timestamp
     toPledge.save()
-    fromPledge.save()
 }
 
 export function handleTransfer(event: Transfer): void {
