@@ -183,17 +183,21 @@ function createOrUpdatePledge(event: Transfer): void {
             event.params.amount.toString()
         ]
     )
-    let pledgeEntity = Pledge.load(event.params.to.toHex())
-    if (pledgeEntity == null) pledgeEntity = new Pledge(event.params.to.toHex())
-    pledgeEntity.owner = owner
-    pledgeEntity.token = token.toHexString()
-    pledgeEntity.amount = amount
-    pledgeEntity.commitTime = commitTime
-    pledgeEntity.intendedProject = intendedProject
-    pledgeEntity.pledgeState = pledgeState
-    pledgeEntity.nDelegates = ndelegates
-    pledgeEntity.creationTime = timestamp
-    pledgeEntity.save()
+    let toPledge = Pledge.load(event.params.to.toHex())
+    let fromPledge = Pledge.load(event.params.from.toHex())
+    if (toPledge == null) toPledge = new Pledge(event.params.to.toHex())
+    if (fromPledge == null) fromPledge = new Pledge(event.params.from.toHex())
+    fromPledge.amount = fromPledge.amount.minus(amount)
+    toPledge.owner = owner
+    toPledge.token = token.toHexString()
+    toPledge.amount = toPledge.amount.plus(amount)
+    toPledge.commitTime = commitTime
+    toPledge.intendedProject = intendedProject
+    toPledge.pledgeState = pledgeState
+    toPledge.nDelegates = ndelegates
+    toPledge.creationTime = timestamp
+    toPledge.save()
+    fromPledge.save()
 }
 
 export function handleTransfer(event: Transfer): void {
