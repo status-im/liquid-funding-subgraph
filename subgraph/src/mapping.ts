@@ -168,6 +168,7 @@ function createOrUpdatePledge(event: Transfer): void {
     let intendedProject = pledge.value3
     let pledgeState = pledge.value7
     let ndelegates = pledge.value2
+    let transferAmount = event.params.amount
     log.info(
         'pledge id: {}, amount: {}, owner: {}, nDelegates: {}, intendedProject: {}, commitTime: {}, oldPledge: {}, pledge token: {}, pledge state: {}, transfer amount: {}',
         [
@@ -190,12 +191,16 @@ function createOrUpdatePledge(event: Transfer): void {
         toPledge.amount = new BigInt(0)
     }
     if (fromPledge != null) {
-        fromPledge.amount = fromPledge.amount.minus(amount)
+        log.info(
+            'pledge from: {}, existing amount: {}, transfer amount: {}',
+            [fromPledge.id.toString(), fromPledge.amount.toString(), amount.toString()]
+        )
+        fromPledge.amount = fromPledge.amount.minus(transferAmount)
         fromPledge.save()
     }
     toPledge.owner = owner
     toPledge.token = token.toHexString()
-    toPledge.amount = toPledge.amount.plus(amount)
+    toPledge.amount = toPledge.amount.plus(transferAmount)
     toPledge.commitTime = commitTime
     toPledge.intendedProject = intendedProject
     toPledge.pledgeState = pledgeState
