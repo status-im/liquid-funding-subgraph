@@ -130,11 +130,11 @@ export function handleAddGiverAndDonate(call: AddGiverAndDonateCall): void {
         ]
     )
 }
-
+const getPledgeInfoId = (pledge: Pledge): string => pledge.owner + pledge.token
 function createOrUpdatePledgeInfo(event: Transfer): void {
     let pledgeTo = Pledge.load(event.params.to.toHex())
     let amount = event.params.amount
-    let pledgeInfoToId = pledgeTo.owner + pledgeTo.token
+    let pledgeInfoToId = getPledgeInfoId(pledgeTo as Pledge)
     let pledgeInfoTo = PledgesInfo.load(pledgeInfoToId)
     if (pledgeInfoTo == null) {
         pledgeInfoTo = new PledgesInfo(pledgeInfoToId)
@@ -150,7 +150,7 @@ function createOrUpdatePledgeInfo(event: Transfer): void {
 
     let pledgeFrom = Pledge.load(event.params.from.toHex())
     if (pledgeFrom != null) {
-        let pledgeInfoFromId = pledgeFrom.owner + pledgeFrom.token
+        let pledgeInfoFromId = getPledgeInfoId(pledgeFrom as Pledge)
         let pledgeInfoFrom = PledgesInfo.load(pledgeInfoFromId)
         pledgeInfoFrom.balance = pledgeInfoFrom.balance.minus(amount)
         pledgeInfoFrom.save()
