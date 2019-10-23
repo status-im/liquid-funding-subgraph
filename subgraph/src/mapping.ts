@@ -33,13 +33,14 @@ export function handleAddProject(call: AddProjectCall): void {
     createProjectInfo(content, profile)
 }
 
-function createProjectInfo(content: String, profile: Profile): void {
+function createProjectInfo(content: String, profile: Profile, isFile: boolean = false): void {
     let hash = content.split('/').slice(-1)[0]
-    let contentHash = hash + '/manifest.json'
+    let contentHash = isFile ? hash : hash + '/manifest.json'
     let manifest = ipfs.cat(contentHash)
 
     if (manifest == null) {
         log.info('manifest is null', [])
+        if (!isFile) createProjectInfo(content, profile, true)
     } else {
         let parsed = json.fromBytes(manifest as Bytes).toObject()
         log.info(
@@ -136,6 +137,7 @@ function createOrUpdatePledgeInfo(event: Transfer): void {
     let amount = event.params.amount
     let pledgeInfoToId = getPledgeInfoId(pledgeTo as Pledge)
     let pledgeInfoTo = PledgesInfo.load(pledgeInfoToId)
+    let pledgeFrom = Pledge.load(event.params.from.toHex())
     if (pledgeInfoTo == null) {
         pledgeInfoTo = new PledgesInfo(pledgeInfoToId)
         pledgeInfoTo.token = pledgeTo.token
@@ -144,17 +146,20 @@ function createOrUpdatePledgeInfo(event: Transfer): void {
         pledgeInfoTo.lifetimeReceived = new BigInt(0)
         pledgeInfoTo.balance = new BigInt(0)
     }
-    pledgeInfoTo.lifetimeReceived = amount.plus(pledgeInfoTo.lifetimeReceived)
     pledgeInfoTo.balance = amount.plus(pledgeInfoTo.balance)
-    pledgeInfoTo.save()
 
-    let pledgeFrom = Pledge.load(event.params.from.toHex())
     if (pledgeFrom != null) {
         let pledgeInfoFromId = getPledgeInfoId(pledgeFrom as Pledge)
         let pledgeInfoFrom = PledgesInfo.load(pledgeInfoFromId)
         pledgeInfoFrom.balance = pledgeInfoFrom.balance.minus(amount)
         pledgeInfoFrom.save()
+        if (pledgeInfoFromId != pledgeInfoToId) {
+            pledgeInfoTo.lifetimeReceived = amount.plus(pledgeInfoTo.lifetimeReceived)
+        }
+    } else {
+        pledgeInfoTo.lifetimeReceived = amount.plus(pledgeInfoTo.lifetimeReceived)
     }
+    pledgeInfoTo.save()
 }
 
 function createOrUpdatePledge(event: Transfer): void {
