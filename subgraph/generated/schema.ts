@@ -335,6 +335,23 @@ export class Pledge extends Entity {
   set creationTime(value: BigInt) {
     this.set("creationTime", Value.fromBigInt(value));
   }
+
+  get oldPledge(): string | null {
+    let value = this.get("oldPledge");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set oldPledge(value: string | null) {
+    if (value === null) {
+      this.unset("oldPledge");
+    } else {
+      this.set("oldPledge", Value.fromString(value as string));
+    }
+  }
 }
 
 export class ProjectInfo extends Entity {

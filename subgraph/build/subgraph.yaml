@@ -45,6 +45,8 @@ dataSources:
       callHandlers:
         - function: addProject(string,string,address,uint64,uint64,address)
           handler: handleAddProject
+        - function: addGiver(address,string,string,uint64,address)
+          handler: handleAddGiver
         - function: donate(uint64,uint64,address,uint256)
           handler: handleDonate
       file: Contract/Contract.wasm

@@ -32,6 +32,7 @@ type Pledge @entity {
      intendedProject: BigInt!
      pledgeState: Int!
      creationTime: BigInt!
+     oldPledge: Pledge
 }
 
 type ProjectInfo @entity {

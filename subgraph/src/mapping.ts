@@ -10,11 +10,30 @@ import {
   ProjectAdded,
   ProjectUpdated,
   AddProjectCall,
+  AddGiverCall,
   DonateCall,
   AddGiverAndDonateCall,
 } from "../generated/Contract/Contract"
 import { Profile, PledgesInfo, Pledge, ProjectInfo } from "../generated/schema"
 
+export function handleAddGiver(call: AddGiverCall): void {
+    log.info(
+        'handleAddGiver triggered. idGiver: {}',
+        [call.outputs.idGiver.toString()]
+    )
+    let id = call.outputs.idGiver
+    let timestamp = call.block.timestamp
+    let profile = new Profile(id.toHex())
+    profile.url = call.inputs.url
+    profile.name = call.inputs.name
+    profile.addr = call.inputs.addr
+    profile.commitTime = call.inputs.commitTime
+    profile.canceled = false
+    profile.type = 'GIVER'
+    profile.profileId = id
+    profile.creationTime = timestamp
+    profile.save()
+}
 
 export function handleAddProject(call: AddProjectCall): void {
     let id = call.outputs.idProject
@@ -211,6 +230,7 @@ function createOrUpdatePledge(event: Transfer): void {
     toPledge.pledgeState = pledgeState
     toPledge.nDelegates = ndelegates
     toPledge.creationTime = timestamp
+    toPledge.oldPledge = event.params.from.toHex()
     toPledge.save()
 }
 
@@ -262,9 +282,9 @@ export function handleTransfer(event: Transfer): void {
   // - contract.vault(...)
 }
 
-export function handleCancelProject(event: CancelProject): void {}
-
 export function handleGiverAdded(event: GiverAdded): void {}
+
+export function handleCancelProject(event: CancelProject): void {}
 
 export function handleGiverUpdated(event: GiverUpdated): void {}
 
