@@ -11,7 +11,8 @@ import {
   EthereumTuple,
   Bytes,
   Address,
-  BigInt
+  BigInt,
+  CallResult
 } from "@graphprotocol/graph-ts";
 
 export class Transfer extends EthereumEvent {
@@ -309,29 +310,81 @@ export class Contract extends SmartContract {
 
   APP_ADDR_NAMESPACE(): Bytes {
     let result = super.call("APP_ADDR_NAMESPACE", []);
+
     return result[0].toBytes();
+  }
+
+  try_APP_ADDR_NAMESPACE(): CallResult<Bytes> {
+    let result = super.tryCall("APP_ADDR_NAMESPACE", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBytes());
   }
 
   whitelistDisabled(): boolean {
     let result = super.call("whitelistDisabled", []);
+
     return result[0].toBoolean();
+  }
+
+  try_whitelistDisabled(): CallResult<boolean> {
+    let result = super.tryCall("whitelistDisabled", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBoolean());
   }
 
   isProjectCanceled(projectId: BigInt): boolean {
     let result = super.call("isProjectCanceled", [
       EthereumValue.fromUnsignedBigInt(projectId)
     ]);
+
     return result[0].toBoolean();
+  }
+
+  try_isProjectCanceled(projectId: BigInt): CallResult<boolean> {
+    let result = super.tryCall("isProjectCanceled", [
+      EthereumValue.fromUnsignedBigInt(projectId)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBoolean());
   }
 
   PLUGIN_MANAGER_ROLE(): Bytes {
     let result = super.call("PLUGIN_MANAGER_ROLE", []);
+
     return result[0].toBytes();
+  }
+
+  try_PLUGIN_MANAGER_ROLE(): CallResult<Bytes> {
+    let result = super.tryCall("PLUGIN_MANAGER_ROLE", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBytes());
   }
 
   numberOfPledges(): BigInt {
     let result = super.call("numberOfPledges", []);
+
     return result[0].toBigInt();
+  }
+
+  try_numberOfPledges(): CallResult<BigInt> {
+    let result = super.tryCall("numberOfPledges", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   getPledgeDelegate(
@@ -342,6 +395,7 @@ export class Contract extends SmartContract {
       EthereumValue.fromUnsignedBigInt(idPledge),
       EthereumValue.fromUnsignedBigInt(idxDelegate)
     ]);
+
     return new Contract__getPledgeDelegateResult(
       result[0].toBigInt(),
       result[1].toAddress(),
@@ -349,15 +403,47 @@ export class Contract extends SmartContract {
     );
   }
 
+  try_getPledgeDelegate(
+    idPledge: BigInt,
+    idxDelegate: BigInt
+  ): CallResult<Contract__getPledgeDelegateResult> {
+    let result = super.tryCall("getPledgeDelegate", [
+      EthereumValue.fromUnsignedBigInt(idPledge),
+      EthereumValue.fromUnsignedBigInt(idxDelegate)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(
+      new Contract__getPledgeDelegateResult(
+        value[0].toBigInt(),
+        value[1].toAddress(),
+        value[2].toString()
+      )
+    );
+  }
+
   getRecoveryVault(): Address {
     let result = super.call("getRecoveryVault", []);
+
     return result[0].toAddress();
+  }
+
+  try_getRecoveryVault(): CallResult<Address> {
+    let result = super.tryCall("getRecoveryVault", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
   }
 
   getPledge(idPledge: BigInt): Contract__getPledgeResult {
     let result = super.call("getPledge", [
       EthereumValue.fromUnsignedBigInt(idPledge)
     ]);
+
     return new Contract__getPledgeResult(
       result[0].toBigInt(),
       result[1].toBigInt(),
@@ -370,16 +456,62 @@ export class Contract extends SmartContract {
     );
   }
 
+  try_getPledge(idPledge: BigInt): CallResult<Contract__getPledgeResult> {
+    let result = super.tryCall("getPledge", [
+      EthereumValue.fromUnsignedBigInt(idPledge)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(
+      new Contract__getPledgeResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toBigInt(),
+        value[3].toBigInt(),
+        value[4].toBigInt(),
+        value[5].toBigInt(),
+        value[6].toAddress(),
+        value[7].toI32()
+      )
+    );
+  }
+
   isValidPlugin(addr: Address): boolean {
     let result = super.call("isValidPlugin", [EthereumValue.fromAddress(addr)]);
+
     return result[0].toBoolean();
+  }
+
+  try_isValidPlugin(addr: Address): CallResult<boolean> {
+    let result = super.tryCall("isValidPlugin", [
+      EthereumValue.fromAddress(addr)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBoolean());
   }
 
   normalizePledge(idPledge: BigInt): BigInt {
     let result = super.call("normalizePledge", [
       EthereumValue.fromUnsignedBigInt(idPledge)
     ]);
+
     return result[0].toBigInt();
+  }
+
+  try_normalizePledge(idPledge: BigInt): CallResult<BigInt> {
+    let result = super.tryCall("normalizePledge", [
+      EthereumValue.fromUnsignedBigInt(idPledge)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   addDelegate(
@@ -394,17 +526,57 @@ export class Contract extends SmartContract {
       EthereumValue.fromUnsignedBigInt(commitTime),
       EthereumValue.fromAddress(plugin)
     ]);
+
     return result[0].toBigInt();
+  }
+
+  try_addDelegate(
+    name: string,
+    url: string,
+    commitTime: BigInt,
+    plugin: Address
+  ): CallResult<BigInt> {
+    let result = super.tryCall("addDelegate", [
+      EthereumValue.fromString(name),
+      EthereumValue.fromString(url),
+      EthereumValue.fromUnsignedBigInt(commitTime),
+      EthereumValue.fromAddress(plugin)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   numberOfPledgeAdmins(): BigInt {
     let result = super.call("numberOfPledgeAdmins", []);
+
     return result[0].toBigInt();
+  }
+
+  try_numberOfPledgeAdmins(): CallResult<BigInt> {
+    let result = super.tryCall("numberOfPledgeAdmins", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   EVMSCRIPT_REGISTRY_APP_ID(): Bytes {
     let result = super.call("EVMSCRIPT_REGISTRY_APP_ID", []);
+
     return result[0].toBytes();
+  }
+
+  try_EVMSCRIPT_REGISTRY_APP_ID(): CallResult<Bytes> {
+    let result = super.tryCall("EVMSCRIPT_REGISTRY_APP_ID", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBytes());
   }
 
   addGiver(
@@ -421,7 +593,29 @@ export class Contract extends SmartContract {
       EthereumValue.fromUnsignedBigInt(commitTime),
       EthereumValue.fromAddress(plugin)
     ]);
+
     return result[0].toBigInt();
+  }
+
+  try_addGiver(
+    addr: Address,
+    name: string,
+    url: string,
+    commitTime: BigInt,
+    plugin: Address
+  ): CallResult<BigInt> {
+    let result = super.tryCall("addGiver", [
+      EthereumValue.fromAddress(addr),
+      EthereumValue.fromString(name),
+      EthereumValue.fromString(url),
+      EthereumValue.fromUnsignedBigInt(commitTime),
+      EthereumValue.fromAddress(plugin)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   addProject(
@@ -440,14 +634,50 @@ export class Contract extends SmartContract {
       EthereumValue.fromUnsignedBigInt(commitTime),
       EthereumValue.fromAddress(plugin)
     ]);
+
     return result[0].toBigInt();
+  }
+
+  try_addProject(
+    name: string,
+    url: string,
+    projectAdmin: Address,
+    parentProject: BigInt,
+    commitTime: BigInt,
+    plugin: Address
+  ): CallResult<BigInt> {
+    let result = super.tryCall("addProject", [
+      EthereumValue.fromString(name),
+      EthereumValue.fromString(url),
+      EthereumValue.fromAddress(projectAdmin),
+      EthereumValue.fromUnsignedBigInt(parentProject),
+      EthereumValue.fromUnsignedBigInt(commitTime),
+      EthereumValue.fromAddress(plugin)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   allowRecoverability(token: Address): boolean {
     let result = super.call("allowRecoverability", [
       EthereumValue.fromAddress(token)
     ]);
+
     return result[0].toBoolean();
+  }
+
+  try_allowRecoverability(token: Address): CallResult<boolean> {
+    let result = super.tryCall("allowRecoverability", [
+      EthereumValue.fromAddress(token)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBoolean());
   }
 
   addGiver1(
@@ -462,32 +692,104 @@ export class Contract extends SmartContract {
       EthereumValue.fromUnsignedBigInt(commitTime),
       EthereumValue.fromAddress(plugin)
     ]);
+
     return result[0].toBigInt();
+  }
+
+  try_addGiver1(
+    name: string,
+    url: string,
+    commitTime: BigInt,
+    plugin: Address
+  ): CallResult<BigInt> {
+    let result = super.tryCall("addGiver", [
+      EthereumValue.fromString(name),
+      EthereumValue.fromString(url),
+      EthereumValue.fromUnsignedBigInt(commitTime),
+      EthereumValue.fromAddress(plugin)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   appId(): Bytes {
     let result = super.call("appId", []);
+
     return result[0].toBytes();
+  }
+
+  try_appId(): CallResult<Bytes> {
+    let result = super.tryCall("appId", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBytes());
   }
 
   getCodeHash(addr: Address): Bytes {
     let result = super.call("getCodeHash", [EthereumValue.fromAddress(addr)]);
+
     return result[0].toBytes();
+  }
+
+  try_getCodeHash(addr: Address): CallResult<Bytes> {
+    let result = super.tryCall("getCodeHash", [
+      EthereumValue.fromAddress(addr)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBytes());
   }
 
   ETH(): Address {
     let result = super.call("ETH", []);
+
     return result[0].toAddress();
+  }
+
+  try_ETH(): CallResult<Address> {
+    let result = super.tryCall("ETH", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
   }
 
   getInitializationBlock(): BigInt {
     let result = super.call("getInitializationBlock", []);
+
     return result[0].toBigInt();
+  }
+
+  try_getInitializationBlock(): CallResult<BigInt> {
+    let result = super.tryCall("getInitializationBlock", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBigInt());
   }
 
   EVMSCRIPT_REGISTRY_APP(): Bytes {
     let result = super.call("EVMSCRIPT_REGISTRY_APP", []);
+
     return result[0].toBytes();
+  }
+
+  try_EVMSCRIPT_REGISTRY_APP(): CallResult<Bytes> {
+    let result = super.tryCall("EVMSCRIPT_REGISTRY_APP", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBytes());
   }
 
   canPerform(_sender: Address, _role: Bytes, params: Array<BigInt>): boolean {
@@ -496,18 +798,47 @@ export class Contract extends SmartContract {
       EthereumValue.fromFixedBytes(_role),
       EthereumValue.fromUnsignedBigIntArray(params)
     ]);
+
     return result[0].toBoolean();
+  }
+
+  try_canPerform(
+    _sender: Address,
+    _role: Bytes,
+    params: Array<BigInt>
+  ): CallResult<boolean> {
+    let result = super.tryCall("canPerform", [
+      EthereumValue.fromAddress(_sender),
+      EthereumValue.fromFixedBytes(_role),
+      EthereumValue.fromUnsignedBigIntArray(params)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toBoolean());
   }
 
   kernel(): Address {
     let result = super.call("kernel", []);
+
     return result[0].toAddress();
+  }
+
+  try_kernel(): CallResult<Address> {
+    let result = super.tryCall("kernel", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
   }
 
   getPledgeAdmin(idAdmin: BigInt): Contract__getPledgeAdminResult {
     let result = super.call("getPledgeAdmin", [
       EthereumValue.fromUnsignedBigInt(idAdmin)
     ]);
+
     return new Contract__getPledgeAdminResult(
       result[0].toI32(),
       result[1].toAddress(),
@@ -520,14 +851,60 @@ export class Contract extends SmartContract {
     );
   }
 
+  try_getPledgeAdmin(
+    idAdmin: BigInt
+  ): CallResult<Contract__getPledgeAdminResult> {
+    let result = super.tryCall("getPledgeAdmin", [
+      EthereumValue.fromUnsignedBigInt(idAdmin)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(
+      new Contract__getPledgeAdminResult(
+        value[0].toI32(),
+        value[1].toAddress(),
+        value[2].toString(),
+        value[3].toString(),
+        value[4].toBigInt(),
+        value[5].toBigInt(),
+        value[6].toBoolean(),
+        value[7].toAddress()
+      )
+    );
+  }
+
   getExecutor(_script: Bytes): Address {
     let result = super.call("getExecutor", [EthereumValue.fromBytes(_script)]);
+
     return result[0].toAddress();
+  }
+
+  try_getExecutor(_script: Bytes): CallResult<Address> {
+    let result = super.tryCall("getExecutor", [
+      EthereumValue.fromBytes(_script)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
   }
 
   vault(): Address {
     let result = super.call("vault", []);
+
     return result[0].toAddress();
+  }
+
+  try_vault(): CallResult<Address> {
+    let result = super.tryCall("vault", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
   }
 }
 

@@ -33,6 +33,7 @@ type Pledge @entity {
      pledgeState: Int!
      creationTime: BigInt!
      oldPledge: Pledge
+     creatorAddr: Bytes!
 }
 
 type ProjectInfo @entity {

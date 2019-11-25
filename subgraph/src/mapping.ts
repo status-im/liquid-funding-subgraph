@@ -12,9 +12,9 @@ import {
   AddProjectCall,
   AddGiverCall,
   DonateCall,
-  AddGiverAndDonateCall,
 } from "../generated/Contract/Contract"
 import { Profile, PledgesInfo, Pledge, ProjectInfo } from "../generated/schema"
+
 
 export function handleAddGiver(call: AddGiverCall): void {
     log.info(
@@ -125,31 +125,7 @@ export function handleDonate(call: DonateCall): void {
     )
 }
 
-export function handleAddGiverAndDonate(call: AddGiverAndDonateCall): void {
-    // let receiver = call.inputs.idReceiver
-    // let token = call.inputs.token
-    // let amount = call.inputs.amount
-    // let receiverId = receiver.toString() + token.toString()
 
-    // let receiverPledges = PledgesInfo.load(receiverId)
-
-    // if (receiverPledges == null) {
-    //     receiverPledges = new PledgesInfo(receiverId)
-    //     receiverPledges.token = token.toString()
-    //     receiverPledges.profile = receiver.toHex()
-    // }
-    // receiverPledges.lifetimeReceived.plus(amount)
-    // receiverPledges.balance.plus(amount)
-    // receiverPledges.save()
-    log.info(
-        'id receiver: {}, amount: {}, token: {}',
-        [
-            call.inputs.idReceiver.toString(),
-            call.inputs.amount.toString(),
-            call.inputs.token.toString()
-        ]
-    )
-}
 const getPledgeInfoId = (pledge: Pledge): string => pledge.owner + pledge.token
 function createOrUpdatePledgeInfo(event: Transfer): void {
     let pledgeTo = Pledge.load(event.params.to.toHex())
@@ -231,6 +207,7 @@ function createOrUpdatePledge(event: Transfer): void {
     toPledge.nDelegates = ndelegates
     toPledge.creationTime = timestamp
     toPledge.oldPledge = event.params.from.toHex()
+    toPledge.creatorAddr = event.transaction.from
     toPledge.save()
 }
 
@@ -282,7 +259,21 @@ export function handleTransfer(event: Transfer): void {
   // - contract.vault(...)
 }
 
-export function handleGiverAdded(event: GiverAdded): void {}
+export function handleGiverAdded(event: GiverAdded): void {
+    let id = event.params.idGiver
+    let timestamp = event.block.timestamp
+    let profile = new Profile(id.toHex())
+    let content = event.params.url
+    profile.url = content
+    profile.addr = event.params.addr
+    profile.name = ''
+    profile.canceled = false
+    profile.commitTime = new BigInt(259200) // this is standard when creating giver for donation
+    profile.type = 'GIVER'
+    profile.profileId = id
+    profile.creationTime = timestamp
+    profile.save()
+}
 
 export function handleCancelProject(event: CancelProject): void {}
 

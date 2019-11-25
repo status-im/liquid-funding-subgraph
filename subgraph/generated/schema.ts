@@ -352,6 +352,15 @@ export class Pledge extends Entity {
       this.set("oldPledge", Value.fromString(value as string));
     }
   }
+
+  get creatorAddr(): Bytes {
+    let value = this.get("creatorAddr");
+    return value.toBytes();
+  }
+
+  set creatorAddr(value: Bytes) {
+    this.set("creatorAddr", Value.fromBytes(value));
+  }
 }
 
 export class ProjectInfo extends Entity {
