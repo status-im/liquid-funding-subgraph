@@ -10,6 +10,7 @@ import {
   ProjectAdded,
   ProjectUpdated,
   AddProjectCall,
+  UpdateProjectCall,
   AddGiverCall,
   DonateCall,
 } from "../generated/Contract/Contract"
@@ -50,6 +51,16 @@ export function handleAddProject(call: AddProjectCall): void {
     profile.creationTime = timestamp
     profile.save()
     createProjectInfo(content, profile)
+}
+
+export function handleUpdateProject(call: UpdateProjectCall): void {
+    let id = call.inputs.idProject
+    let content = call.inputs.newUrl
+    let updatedProfile = Profile.load(id.toHex())
+    updatedProfile.name = call.inputs.newName
+    updatedProfile.url = content
+    updatedProfile.save()
+    createProjectInfo(content, updatedProfile as Profile)
 }
 
 function createProjectInfo(content: String, profile: Profile, isFile: boolean = false): void {
