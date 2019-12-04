@@ -15,6 +15,8 @@ import {
   DonateCall,
 } from "../generated/Contract/Contract"
 import { Profile, PledgesInfo, Pledge, ProjectInfo } from "../generated/schema"
+import { skipBlocks } from "./helpers/ignore"
+import { isJson } from "./helpers/json"
 
 
 export function handleAddGiver(call: AddGiverCall): void {
@@ -66,12 +68,11 @@ export function handleUpdateProject(call: UpdateProjectCall): void {
 function createProjectInfo(content: String, profile: Profile, isFile: boolean = false): void {
     let hash = content.split('/').slice(-1)[0]
     let contentHash = isFile ? hash : hash + '/manifest.json'
-    let manifest = ipfs.cat(contentHash)
+    let manifest: Bytes | null = ipfs.cat(contentHash)
 
     if (manifest == null) {
-        log.info('manifest is null', [])
         if (!isFile) createProjectInfo(content, profile, true)
-    } else {
+    } else if (isJson(manifest as Bytes)) {
         let parsed = json.fromBytes(manifest as Bytes).toObject()
         log.info(
             'ipfs title: {}',
