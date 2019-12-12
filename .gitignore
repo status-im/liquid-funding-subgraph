@@ -59,3 +59,15 @@ typings/
 
 # next.js build output
 .next
+
+# folders
+.vscode/
+build/
+lib/
+node_modules/
+src/types/
+
+# files
+.DS_Store
+.env
+subgraph.yaml
