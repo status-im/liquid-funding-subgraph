@@ -8,7 +8,7 @@ const { t } = require("typy");
 function getNetworkNameForSubgraph() {
   switch (process.env.SUBGRAPH) {
     case undefined:
-  case "bgits/assemble":
+    case "bgits/assemble":
       return "mainnet";
     case "bgits/liquid-funding-rinkeby":
       return "ropsten";
