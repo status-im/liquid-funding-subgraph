@@ -1,0 +1,56 @@
+specVersion: 0.0.2
+description: Assemble - funding projects for the common good
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Contract
+    network: {{networkName}}
+    source:
+      address: {{contracts.LiquidPledging.address}}
+      abi: Contract
+      startBlock: {{contracts.LiquidPledging.startBlock}} 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - CancelProject
+        - GiverAdded
+        - GiverUpdated
+        - DelegateAdded
+        - DelegateUpdated
+        - ProjectAdded
+        - ProjectUpdated
+        - Profile
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: Transfer(indexed uint256,indexed uint256,uint256)
+          handler: handleTransfer
+        - event: CancelProject(indexed uint256)
+          handler: handleCancelProject
+        - event: GiverAdded(indexed uint64,indexed address,string)
+          handler: handleGiverAdded
+        - event: GiverUpdated(indexed uint64,string)
+          handler: handleGiverUpdated
+        - event: DelegateAdded(indexed uint64,string)
+          handler: handleDelegateAdded
+        - event: DelegateUpdated(indexed uint64,string)
+          handler: handleDelegateUpdated
+        - event: ProjectAdded(indexed uint64,string)
+          handler: handleProjectAdded
+        - event: ProjectUpdated(indexed uint64,string)
+          handler: handleProjectUpdated
+      callHandlers:
+        - function: addProject(string,string,address,uint64,uint64,address)
+          handler: handleAddProject
+        - function: updateProject(uint64,address,string,string,uint64)
+          handler: handleUpdateProject
+        - function: addGiver(address,string,string,uint64,address)
+          handler: handleAddGiver
+        - function: donate(uint64,uint64,address,uint256)
+          handler: handleDonate
+      file: ./src/mapping.ts
