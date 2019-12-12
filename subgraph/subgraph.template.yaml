@@ -7,7 +7,7 @@ dataSources:
     name: Contract
     network: {{networkName}}
     source:
-      address: {{contracts.LiquidPledging.address}}
+      address: "{{contracts.LiquidPledging.address}}"
       abi: Contract
       startBlock: {{contracts.LiquidPledging.startBlock}} 
     mapping:

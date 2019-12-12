@@ -102,41 +102,7 @@ function createProjectInfo(content: String, profile: Profile, isFile: boolean = 
     }
 }
 
-export function handleDonate(call: DonateCall): void {
-    // let giver = call.inputs.idGiver
-    // let receiver = call.inputs.idReceiver
-    // let token = call.inputs.token
-    // let amount = call.inputs.amount
-
-    // let giverId = giver.toString() + token.toString()
-    // let receiverId = receiver.toString() + token.toString()
-
-    // let giverPledges = PledgesInfo.load(giverId)
-    // let receiverPledges = PledgesInfo.load(receiverId)
-
-    // if (receiverPledges == null) {
-    //     receiverPledges = new PledgesInfo(receiverId)
-    //     receiverPledges.token = token.toString()
-    //     receiverPledges.profile = receiver.toHex()
-    // }
-    // if (giver.notEqual(new BigInt(0))) {
-    //     giverPledges.balance.minus(amount)
-    //     giverPledges.save()
-    // }
-    // receiverPledges.lifetimeReceived.plus(amount)
-    // receiverPledges.balance.plus(amount)
-    // receiverPledges.save()
-
-    log.info(
-        'id receiver: {}, amount: {}, token: {}',
-        [
-            call.inputs.idReceiver.toString(),
-            call.inputs.amount.toString(),
-            call.inputs.token.toString()
-        ]
-    )
-}
-
+export function handleDonate(call: DonateCall): void {}
 
 const getPledgeInfoId = (pledge: Pledge): string => pledge.owner + pledge.token
 function createOrUpdatePledgeInfo(event: Transfer): void {
