@@ -1,16 +1,27 @@
 {
-  "name": "liquid-funding-rinkeby",
+  "name": "liquid-funding",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ bgits/liquid-funding-rinkeby",
+    "clean": "shx rm -rf ./build ./src/types ./subgraph.yaml",
+    "deploy": "graph deploy $SUBGRAPH --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ bgits/liquid-funding-rinkeby",
     "remove-local": "graph remove --node http://localhost:8020/ bgits/liquid-funding-rinkeby",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bgits/liquid-funding-rinkeby"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bgits/liquid-funding-rinkeby",
+    "deploy:ropsten": "yarn prepare:ropsten && SUBGRAPH=bgits/liquid-funding-rinkeby yarn deploy",
+    "deploy:mainnet": "yarn prepare:mainnet && SUBGRAPH=bgits/assemble yarn deploy",
+    "prepare:ropsten": "NETWORK_NAME=ropsten node ./templatify.js",
+    "prepare:mainnet": "NETWORK_NAME=mainnet node ./templatify.js"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.16.0",
-    "@graphprotocol/graph-ts": "0.16.0"
+    "@graphprotocol/graph-ts": "0.16.0",
+    "axios": "^0.19.0",
+    "fs-extra": "^8.1.0",
+    "handlebars": "^4.5.2",
+    "js-yaml": "^3.13.1",
+    "shx": "^0.3.2",
+    "typy": "^3.3.0"
   }
 }
