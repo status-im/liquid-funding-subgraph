@@ -17,7 +17,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "0.16.0",
     "@graphprotocol/graph-ts": "0.16.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "fs-extra": "^8.1.0",
     "handlebars": "^4.5.2",
     "js-yaml": "^3.13.1",
